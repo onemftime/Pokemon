@@ -12,6 +12,7 @@ import MapKit
 class ViewController: UIViewController, CLLocationManagerDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
+    var updateCount = 0
     
     
     var manager = CLLocationManager()
@@ -33,10 +34,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let region = MKCoordinateRegionMakeWithDistance(manager.location!.coordinate, 1000, 1000)
-        mapView.setRegion(region, animated: false)
+       
+        if updateCount < 3 {
+            
+            let region = MKCoordinateRegionMakeWithDistance(manager.location!.coordinate, 1000, 1000)
+            mapView.setRegion(region, animated: false)
+            
+            updateCount += 1
+        } else {
+            manager.stopUpdatingLocation()
+        }
         
     }
+
+    @IBAction func compassTapped(_ sender: Any) {
+    }
+
 
 }
 
