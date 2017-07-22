@@ -26,6 +26,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             mapView.showsUserLocation = true
             manager.startUpdatingLocation()
             
+            Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { (timer) in
+                
+                if let coord = self.manager.location?.coordinate {
+                    let anno = MKPointAnnotation()
+                    anno.coordinate = coord
+                    let randoLat = (Double (arc4random_uniform(200)) - 100.0)/50000.0
+                    let randoLon = (Double (arc4random_uniform(200)) - 100.0)/50000.0
+                    anno.coordinate.latitude += randoLat
+                    anno.coordinate.longitude += randoLon
+                    self.mapView.addAnnotation(anno)
+                }
+            })
+            
             
         }else {
             manager.requestWhenInUseAuthorization()
@@ -37,7 +50,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
        
         if updateCount < 3 {
             
-            let region = MKCoordinateRegionMakeWithDistance(manager.location!.coordinate, 400, 400)
+            let region = MKCoordinateRegionMakeWithDistance(manager.location!.coordinate, 200, 200)
             mapView.setRegion(region, animated: false)
             
             updateCount += 1
@@ -50,7 +63,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBAction func compassTapped(_ sender: Any) {
         
         if let coord = manager.location?.coordinate {
-        let region = MKCoordinateRegionMakeWithDistance(coord, 400, 400)
+        let region = MKCoordinateRegionMakeWithDistance(coord, 200, 200)
         mapView.setRegion(region, animated: true)
         }
     }
