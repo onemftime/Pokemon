@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 
 class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
-
+    
     @IBOutlet weak var mapView: MKMapView!
     var updateCount = 0
     
@@ -25,7 +25,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         pokemons = getAllPokemon()
         
         manager.delegate = self
-       
+        
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             
             mapView.delegate = self
@@ -91,16 +91,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         mapView.setRegion(region, animated: true)
         
         if let coord = manager.location?.coordinate {
-        MKMapRectContainsPoint(mapView.visibleMapRect, MKMapPointForCoordinate(coord))
-        print("can catch pokemon")
-        }else {
-            print ("pokermon is too far away")
+            if MKMapRectContainsPoint(mapView.visibleMapRect, MKMapPointForCoordinate(coord)) {
+                print("can catch pokemon")
+            }
+            else {
+                print ("pokermon is too far away")
+                
+            }
         }
+        
+        
     }
     
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-       
+        
         if updateCount < 3 {
             
             let region = MKCoordinateRegionMakeWithDistance(manager.location!.coordinate, 200, 200)
@@ -112,17 +117,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         }
         
     }
-
+    
     @IBAction func compassTapped(_ sender: Any) {
         
         if let coord = manager.location?.coordinate {
-        let region = MKCoordinateRegionMakeWithDistance(coord, 200, 200)
-        mapView.setRegion(region, animated: true)
-        
+            let region = MKCoordinateRegionMakeWithDistance(coord, 200, 200)
+            mapView.setRegion(region, animated: true)
+            
         }
     }
-
-
+    
+    
 }
 
 
